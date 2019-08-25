@@ -1,0 +1,23 @@
+{
+	"parser": "@typescript-eslint/parser",
+	"parserOptions": {
+		"ecmaVersion": 2019,
+		"sourceType": "module"
+	},
+	"env": {
+		"node": true,
+		"es6": true,
+		"mocha": true
+	},
+	"extends": ["eslint:recommended", "plugin:mocha/recommended", "prettier"],
+	"plugins": ["mocha"],
+	"rules": {
+		"no-console": [
+			"error",
+			{
+				"allow": ["error", "info", "table"]
+			}
+		],
+		"require-atomic-updates": "off"
+	}
+}

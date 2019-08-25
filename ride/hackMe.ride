@@ -1,0 +1,61 @@
+{-# STDLIB_VERSION 3 #-}
+{-# CONTENT_TYPE DAPP #-}
+{-# SCRIPT_TYPE ACCOUNT #-}
+
+func waveletsToWaves (wavelets: Int) = {
+    wavelets / 100000000
+}
+
+func isAssetPayment (payment: AttachedPayment) = {
+    isDefined(payment.assetId)
+}
+
+func getDepositByAddress (address: String) = {
+    let deposit = getInteger(this, address)
+    match deposit {
+        case i:Int => i
+        case _ => 0
+    }
+}
+
+@Callable(invokation)
+func deposit() = {
+    let senderAddress = toBase58String(invokation.caller.bytes)
+    let payment = extract(invokation.payment)
+
+    if(isAssetPayment(payment)) 
+        then throw("Only $WAVES deposits are allowed") 
+        else {
+            let depositAmountWavelets = payment.amount
+            let previousDepositAmountWavelets = getDepositByAddress(invokation.caller.toString())
+            let updatedDepositAmountWavelets = depositAmountWavelets + previousDepositAmountWavelets
+
+            WriteSet([DataEntry(senderAddress, updatedDepositAmountWavelets)])
+        }
+}
+
+@Callable(invokation)
+func withdraw(amountWavelets: Int) = {
+    let recipientAddress = toBase58String(invokation.caller.bytes)
+    let currentDepositAmountWavelets = getDepositByAddress(recipientAddress)
+
+    if(currentDepositAmountWavelets == 0 || amountWavelets > currentDepositAmountWavelets) 
+        then throw("Balance of " + recipientAddress + " is to low (" + (waveletsToWaves(currentDepositAmountWavelets)).toString() + " $WAVES)")
+        else {
+            let updatedDepositAmountWavelets = currentDepositAmountWavelets - amountWavelets
+            
+            ScriptResult(
+                WriteSet([DataEntry(recipientAddress, updatedDepositAmountWavelets)]),
+                TransferSet([ScriptTransfer(invokation.caller, amountWavelets, unit)])
+            )
+        }
+}
+
+@Verifier(outgoingTx)
+func verify() = {
+    match outgoingTx {
+        case t: TransferTransaction => sigVerify(outgoingTx.proofs[0], outgoingTx.bodyBytes, this.bytes)
+        case m: MassTransferTransaction => sigVerify(outgoingTx.proofs[0], outgoingTx.bodyBytes, this.bytes)
+        case _ => true # This is a security issue
+    }
+}

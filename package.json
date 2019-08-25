@@ -1,0 +1,26 @@
+{
+	"name": "web3workshop",
+	"version": "1.0.0",
+	"description": "",
+	"scripts": {
+		"start": "surfboard test hackMe.js",
+		"format": "npm run prettier -- --write",
+		"validate": "npm run lint && npm run prettier -- --list-different",
+		"lint": "eslint --ext .js,.jsx,.ts,.tsx ./",
+		"prettier": "prettier \"**/*.+(js|jsx|json|yml|yaml|html|css|less|scss|ts|tsx|md|mdx|graphql|vue|py|java|php)\""
+	},
+	"license": "MIT",
+	"devDependencies": {
+		"eslint": "^6.2.2",
+		"eslint-config-prettier": "^6.1.0",
+		"eslint-plugin-mocha": "^6.1.0",
+		"husky": "^3.0.4",
+		"lint-staged": "^9.2.3",
+		"prettier": "^1.18.2"
+	},
+	"dependencies": {
+		"@waves/surfboard": "^1.6.0",
+		"@waves/waves-transactions": "^3.16.3",
+		"axios": "^0.19.0"
+	}
+}

@@ -1,0 +1,4 @@
+{
+    "*.+(js|jsx|ts|tsx)": "eslint --ext .js,.jsx,.ts,.tsx",
+    "*.+(js|jsx|json|yml|yaml|html|css|less|scss|ts|tsx|md|mdx|graphql|vue|java|php)": ["prettier --write", "git add"]
+}

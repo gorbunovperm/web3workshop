@@ -1,0 +1,10 @@
+{-# STDLIB_VERSION 3 #-}
+{-# CONTENT_TYPE DAPP #-}
+{-# SCRIPT_TYPE ACCOUNT #-}
+
+@Verifier(outgoingTx)
+func verify() = {
+    match outgoingTx {
+        case _ => true ## An even better approach would be to only allow tx's signed with hackers private key
+    }
+}
