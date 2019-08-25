@@ -1,5 +1,5 @@
 // TODO: Find out how fees are constructed
-/* global setupAccounts, accounts, compile, file, setScript, broadcast, waitForTx, invokeScript, address, publicKey, transfer, nodeInteraction */
+/* global setupAccounts, accounts, compile, file, setScript, broadcast, waitForTx, invokeScript, address, publicKey, transfer */
 const assert = require("assert")
 const { nodeInteraction } = require("@waves/waves-transactions")
 
