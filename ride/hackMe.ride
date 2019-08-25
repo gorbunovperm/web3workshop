@@ -54,8 +54,8 @@ func withdraw(amountWavelets: Int) = {
 @Verifier(outgoingTx)
 func verify() = {
     match outgoingTx {
-        case t: TransferTransaction => sigVerify(outgoingTx.proofs[0], outgoingTx.bodyBytes, this.bytes)
-        case m: MassTransferTransaction => sigVerify(outgoingTx.proofs[0], outgoingTx.bodyBytes, this.bytes)
+        case t: TransferTransaction => sigVerify(outgoingTx.proofs[0], outgoingTx.bodyBytes, outgoingTx.senderPublicKey)
+        case m: MassTransferTransaction => sigVerify(outgoingTx.proofs[0], outgoingTx.bodyBytes, outgoingTx.senderPublicKey)
         case _ => true # This is a security issue
     }
 }
