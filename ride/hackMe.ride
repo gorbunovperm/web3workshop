@@ -39,7 +39,7 @@ func withdraw(amountWavelets: Int) = {
     let recipientAddress = toBase58String(invokation.caller.bytes)
     let currentDepositAmountWavelets = getDepositByAddress(recipientAddress)
 
-    if(currentDepositAmountWavelets == 0 || amountWavelets > currentDepositAmountWavelets) 
+    if(amountWavelets > currentDepositAmountWavelets) 
         then throw("Balance of " + recipientAddress + " is to low (" + (waveletsToWaves(currentDepositAmountWavelets)).toString() + " $WAVES)")
         else {
             let updatedDepositAmountWavelets = currentDepositAmountWavelets - amountWavelets
