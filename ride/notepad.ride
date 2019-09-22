@@ -1,0 +1,17 @@
+{-# STDLIB_VERSION 3 #-}
+{-# CONTENT_TYPE DAPP #-}
+{-# SCRIPT_TYPE ACCOUNT #-}
+
+# This function is callable from the outside
+@Callable(invocation)
+func writeNote (note: String) = {
+    # Extract sender address from invocation
+    let senderAddress = toBase58String(invocation.caller.bytes)
+
+    # Store note in account state
+    WriteSet(
+        [
+            DataEntry(senderAddress, note)
+        ]
+    )
+}
