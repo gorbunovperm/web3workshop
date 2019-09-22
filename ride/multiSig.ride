@@ -1,0 +1,34 @@
+{-# STDLIB_VERSION 3 #-}
+{-# CONTENT_TYPE DAPP #-}
+{-# SCRIPT_TYPE ACCOUNT #-}
+
+# Hardcoded publicKeys from all participants
+let alicePublickey = base58'5KCfYUihwMvNVCn5eZ6TNsSQtTGXDsYWYoeuFHsKgs3p'
+let bobPublicKey = base58'7BXUY8D6MNZ1mxDpNoG8V1SaNhm3s6pvfApn4brTtnS6'
+let cooperPublicKey = base58'5U8pbvrQ8aM88LJdyLwcxavVHUF3Wht6KvQrjroN87vc'
+
+@Verifier(tx)
+func verify() = {
+    let aliceSigned1stProof = sigVerify(tx.bodyBytes, tx.proofs[0], alicePublickey)
+    let aliceSigned2ndProof = sigVerify(tx.bodyBytes, tx.proofs[1], alicePublickey)
+    let aliceSigned3rdProof = sigVerify(tx.bodyBytes, tx.proofs[2], alicePublickey)
+
+    let bobSigned1stProof = sigVerify(tx.bodyBytes, tx.proofs[0], bobPublicKey)
+    let bobSigned2ndProof = sigVerify(tx.bodyBytes, tx.proofs[1], bobPublicKey)
+    let bobSigned3rdProof = sigVerify(tx.bodyBytes, tx.proofs[2], bobPublicKey)
+
+    let cooperSigned1stProof = sigVerify(tx.bodyBytes, tx.proofs[0], cooperPublicKey)
+    let cooperSigned2ndProof = sigVerify(tx.bodyBytes, tx.proofs[1], cooperPublicKey)
+    let cooperSigned3rdProof = sigVerify(tx.bodyBytes, tx.proofs[2], cooperPublicKey)
+
+    let aliceSigned = aliceSigned1stProof || aliceSigned2ndProof || aliceSigned3rdProof
+    let bobSigned = bobSigned1stProof || bobSigned2ndProof || bobSigned3rdProof
+    let cooperSigned = cooperSigned1stProof || cooperSigned2ndProof || cooperSigned3rdProof
+
+    let isSignedByAtLeast2Parties = aliceSigned && bobSigned || aliceSigned && cooperSigned || bobSigned && cooperSigned
+
+    match tx {
+        # Only allow transactions which are signed by 2-of-3 parties
+        case _ => isSignedByAtLeast2Parties
+    }
+}
