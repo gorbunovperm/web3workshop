@@ -1,5 +1,4 @@
 {
-	"parser": "@typescript-eslint/parser",
 	"parserOptions": {
 		"ecmaVersion": 2019,
 		"sourceType": "module"
@@ -18,6 +17,7 @@
 				"allow": ["error", "info", "table"]
 			}
 		],
-		"require-atomic-updates": "off"
+		"require-atomic-updates": "off",
+		"mocha/no-hooks-for-single-case": "off"
 	}
 }
