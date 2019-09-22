@@ -2,8 +2,9 @@
 const assert = require("assert")
 const { nodeInteraction } = require("@waves/waves-transactions")
 const { toWavelets } = require("../utils/currency")
+const { getNodeUrl } = require("../utils/getNodeUrl")
 
-const nodeUrl = "http://localhost:6869/"
+const nodeUrl = getNodeUrl()
 const accountsConfig = {
 	alice: toWavelets(10),
 	bob: toWavelets(10),

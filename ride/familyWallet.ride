@@ -1,0 +1,49 @@
+{-# STDLIB_VERSION 3 #-}
+{-# CONTENT_TYPE DAPP #-}
+{-# SCRIPT_TYPE ACCOUNT #-}
+
+func waveletsToWaves (wavelets: Int) = wavelets / 100000000
+
+func isAssetPayment (payment: AttachedPayment) = isDefined(payment.assetId)
+
+func getDepositByAddress (address: String) = {
+    let deposit = getInteger(this, address)
+    match deposit {
+        case i:Int => i
+        case _ => 0
+    }
+}
+
+@Callable(invocation)
+func deposit() = {
+    let senderAddress = toBase58String(invocation.caller.bytes)
+    let payment = extract(invocation.payment)
+
+    if(isAssetPayment(payment)) 
+        then throw("Only $WAVES deposits are allowed") 
+        else {
+            let depositAmountWavelets = payment.amount
+            let previousDepositAmountWavelets = getDepositByAddress(invocation.caller.toString())
+            let updatedDepositAmountWavelets = depositAmountWavelets + previousDepositAmountWavelets
+
+            WriteSet([DataEntry(senderAddress, updatedDepositAmountWavelets)])
+        }
+}
+
+@Callable(invocation)
+func withdraw(amountWavelets: Int) = {
+    let recipientPublicKey = invocation.caller
+    let recipientAddress = toBase58String(invocation.caller.bytes)
+    let currentDepositAmountWavelets = getDepositByAddress(recipientAddress)
+
+    if(amountWavelets > currentDepositAmountWavelets) 
+        then throw("Balance of " + recipientAddress + " is to low (" + (waveletsToWaves(currentDepositAmountWavelets)).toString() + " $WAVES)")
+        else {
+            let updatedDepositAmountWavelets = currentDepositAmountWavelets - amountWavelets
+            
+            ScriptResult(
+                WriteSet([DataEntry(recipientAddress, updatedDepositAmountWavelets)]),
+                TransferSet([ScriptTransfer(recipientPublicKey, amountWavelets, unit)])
+            )
+        }
+}
