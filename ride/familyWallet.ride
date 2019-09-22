@@ -32,7 +32,6 @@ func deposit() = {
 
 @Callable(invocation)
 func withdraw(amountWavelets: Int) = {
-    let recipientPublicKey = invocation.caller
     let recipientAddress = toBase58String(invocation.caller.bytes)
     let currentDepositAmountWavelets = getDepositByAddress(recipientAddress)
 
@@ -43,7 +42,7 @@ func withdraw(amountWavelets: Int) = {
             
             ScriptResult(
                 WriteSet([DataEntry(recipientAddress, updatedDepositAmountWavelets)]),
-                TransferSet([ScriptTransfer(recipientPublicKey, amountWavelets, unit)])
+                TransferSet([ScriptTransfer(invocation.caller, amountWavelets, unit)])
             )
         }
 }
