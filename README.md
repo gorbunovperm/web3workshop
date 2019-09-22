@@ -86,6 +86,23 @@ Implementation of a 2-of-3 multi signature wallet.
 npm run multiSig
 ```
 
+### Hackme contract
+
+This contract demonstrates a security vulnerability in @Verifier from the family wallet contract. A hacker exploits it and overwrites the contract.
+The blackHat contract allows him to transfer all funds out of it.
+
+#### Corresponding files
+
+-   [Vulnerable contract](./ride/hackMe.ride)
+-   [BlackHat contract](./ride/blackHat.ride)
+-   [Test](./test/hackMe.js)
+
+#### Running the test
+
+```sh
+npm run hackMe
+```
+
 ## Running the REPL
 
 Open a terminal and enter the following command:

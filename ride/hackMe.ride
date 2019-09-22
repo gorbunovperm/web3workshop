@@ -49,7 +49,7 @@ func withdraw(amountWavelets: Int) = {
                 TransferSet([ScriptTransfer(invokation.caller, amountWavelets, unit)])
             )
         }
-}
+ }
 
 @Verifier(outgoingTx)
 func verify() = {
