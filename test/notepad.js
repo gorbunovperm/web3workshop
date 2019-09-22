@@ -2,7 +2,7 @@
 const assert = require("assert")
 const { nodeInteraction } = require("@waves/waves-transactions")
 const { toWavelets } = require("../utils/currency")
-const { getNodeUrl } = require("../utils/getNodeUrl")
+const getNodeUrl = require("../utils/getNodeUrl")
 
 const nodeUrl = getNodeUrl()
 const accountsConfig = {
